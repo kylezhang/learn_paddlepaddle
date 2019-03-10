@@ -1,3 +1,4 @@
+# coding:utf-8
 import paddle.fluid as fluid
 import numpy as np
 

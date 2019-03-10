@@ -5,7 +5,6 @@ x1 = fluid.layers.fill_constant(shape=[2, 2], value=1, dtype='int64')
 x2 = fluid.layers.fill_constant(shape=[2, 2], value=1, dtype='int64')
 
 y1 = fluid.layers.sum(x=[x1, x2])
-
 place = fluid.CPUPlace()
 exe = fluid.executor.Executor(place)
 
