@@ -1,21 +1,28 @@
 # coding:utf-8
-import paddle.fluid as fluid
 import numpy as np
+import paddle.fluid as fluid
 
-a = fluid.layers.create_tensor(dtype='int64', name='a')
-b = fluid.layers.create_tensor(dtype='int64', name='b')
+# 定义网络
+a = fluid.layers.data(name='a', shape=[1], dtype='float32')
+b = fluid.layers.data(name='b', shape=[1], dtype='float32')
 
-y = fluid.layers.sum(x=[a, b])
+result = fluid.layers.elementwise_add(a, b)
 
-place = fluid.CPUPlace()
-exe = fluid.executor.Executor(place)
-
+# 定义Executor
+cpu = fluid.core.CPUPlace()
+exe = fluid.Executor(cpu)
 exe.run(fluid.default_startup_program())
 
-a1 = np.array([3, 2]).astype('int64')
-b1 = np.array([1, 1]).astype('int64')
+# 准备数据
+data_1 = int(input('Please enter an integer: a='))
+data_2 = int(input('Please enter an integer: b='))
 
-out_a, out_b, result = exe.run(program=fluid.default_main_program(), feed={
-                               'a': a1, 'b': b1}, fetch_list=[a, b, y])
+x = np.array([data_1])
+y = np.array([data_2])
 
-print(out_a, ' + ', out_b, ' = ', result)
+# 执行计算
+outs = exe.run(feed={'a': x, 'b': y}, fetch_list=[a, b, result.name])
+
+# 结果
+print(x, y, outs)
+print("%d + %d = %d" % (data_1, data_2, outs[2][0]))
